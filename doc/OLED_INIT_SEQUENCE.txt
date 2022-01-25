@@ -1,0 +1,89 @@
+SPI				
+1. Power On Sequence				
+W/R	Type	Register	Parameter	Description
+Turn on VCI				
+Delay（No Limit）				
+Turn on VDDIO				
+Delay（No Limit）				
+Turn on VBAT				
+Delay >10ms				
+Reset pin high				
+Delay >10ms				
+MIPI				
+Delay >1ms				
+R/W	Type	Register	Parameter	Description
+w	0x15	"	0xFE"	0x07	Page6
+w	0x15	"	0x15"	0x04	SRAM Read adjust control
+w	0x15	"	0xFE"	0x00	User Command
+w	0x15	"	0x35"	0x00	enable TE
+w	0x15	"	0xC4"	0x80	开启SPI写ram
+w	0x15	"	0x3A"	0x75	用于调整16bit rgb
+w	0x15	"	0x51"	0xFF	
+w	0x15	"	0x2A"	0x00	Set Column Star Address
+w	0x15		0x0E	
+w	0x15		0x01	
+w	0x15		0xD3	
+w	0x15	2B	0x00	Set Row Star Address
+w	0x15		0x00	
+w	0x15		0x01	
+w	0x15		0xC5	
+w	0x15	0x11		sleep out
+Delay >120ms				
+w	0x15	0x29		display on
+				
+2. Power Off Sequence				
+R/W	Type	Register	Parameter	Description
+w	0x15	0x28	0x00	Display Off
+w	0x15	0x10	0x00	Sleep in
+Delay >120ms				
+Reset pin low				
+Dealy >0ms				
+Turn off VBAT				
+Delay >10ms				
+Turn off VC& VDDIO				
+				
+3. Sleep In				
+R/W	Type	Register	Parameter	Description
+w	0x15	0x28	0x00	Display Off
+w	0x15	0x10	0x00	Sleep in
+Delay >120ms				
+				
+4. Sleep Out				
+R/W	Type	Register	Parameter	Description
+w	0x15	0x11	0x00	Sleep Out
+Delay >120ms				
+w	0x15	0x29	0x00	Display On
+				
+5. Idle mode In				
+R/W	Type	Register	Parameter	Description
+w	0x15	0xFE	0x00	
+w	0x15	0x39	0x00	
+				
+6. Idle mode Out				
+R/W	Type	Register	Parameter	Description
+w	0x15	0xFE	0x00	
+w	0x15	0x38	0x00	
+				
+7. Deep standby In				
+R/W	Type	Register	Parameter	Description
+w	0x15	0xFE	0x00	
+w	0x15	0x4F	0x01	
+Pull CLK_P/N & D0_P/N to GND				
+				
+8. Deep standby Out				
+R/W	Type	Register	Parameter	Description
+Rset pin low				
+Delay >3ms				
+Rset pin high				
+Power on Sequence				
+				
+				
+				
+				
+				
+HFP:	20		VFP:	20
+HBP:	40		VBP:	12
+HPW:	20		VPW:	4
+HPX:	454		VPX:	454
+HAA:	HBP+HPX		VAA:	VBP+VPX
+HAL:	HFP+HBP+HPX		VAL:	VFP+VBP+VPX
