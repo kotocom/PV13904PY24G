@@ -32,7 +32,7 @@ template <std::size_t N> Pixel Draw<N>::color_depth(Pixel pix, uint16_t depth, u
     } else {
         pix.channel.B -= B_diff;
     }
-#pragma GCC diagnostic push
+#pragma GCC diagnostic pop
 
     return pix;
 }
