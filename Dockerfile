@@ -19,10 +19,12 @@ RUN if [ ${USER_ID:-0} -ne 0 ] && [ ${GROUP_ID:-0} -ne 0 ]; then \
         /home/koto \
 ;fi
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y apt-utils software-properties-common 2>&1
+
+RUN add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y \
     apt-utils \
     wget \
-    git \
+    git=1:2.36.0-0ppa1~ubuntu18.04.1 \
     vim \
     sudo \
     bc \
@@ -84,7 +86,12 @@ RUN echo "#Config" >> /home/koto/.bashrc && \
     echo "HISTSIZE=10000" >> /home/koto/.bashrc && \
     echo "HISTFILESIZE=20000" >> /home/koto/.bashrc && \
     echo "HISTCONTROL=ignoreboth" >> /home/koto/.bashrc && \
-    echo "cd ~" >> /home/koto/.bashrc
+    echo "cd ~/Oled/out" >> /home/koto/.bashrc && \
+    git config --global --add safe.directory "*"
+
+# Adding some commands to a history for the reverse search.
+RUN echo "rm -rf * && cmake .. && make -j" > /home/koto/.bash_history && \
+    echo "rm -rf * && cmake .. && make" > /home/koto/.bash_history
 
 ## Propagate the rules for the STM NUCLEO-F756ZG devboard programmer.
 RUN echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE:="0666", SYMLINK+="stlinkv2_%n", GROUP="plugdev"' \
