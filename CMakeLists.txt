@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 3.13.5)
 
+# Specifying root cmake path for internal use.
+set(ROOT_CMAKE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "" FORCE)
+
 # We need colors!
 string(ASCII 27 Esc)
 set(ColorReset "${Esc}[m")
@@ -84,9 +87,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 ## Automatically copy the compile_commands.json to the current root for the language daemon.
 set(COMPILE_COMMANDS_FILE "compile_commands.json")
 
-# Specifying root cmake path for internal use.
-set(ROOT_CMAKE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "" FORCE)
-
 add_custom_target(copy-compile-commands ALL
     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${COMPILE_COMMANDS_FILE} ${ROOT_CMAKE}
     COMMENT "${ROOT_CMAKE}/${COMPILE_COMMANDS_FILE} generated."
@@ -134,7 +134,7 @@ if(CMAKE_TARGET_HW_PROGRAMMER)
     add_custom_target(run
         COMMAND sudo bash "-c" "${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_TARGET_HW_PROGRAMMER} ${ARTIFACT}"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS ${PROJECT_NAME}
+        DEPENDS copy-compile-commands ${PROJECT_NAME}
         COMMENT "Flashing target ..."
         VERBATIM
     )

@@ -29,7 +29,7 @@ To build the docker image from [**Dockerfile**][8]: (assuming we are inside the 
 
 To run the docker container:
 
-`docker run -it -v ${PWD}:/home/koto/Oled --privileged koto_doc`
+`docker run -it -v ${PWD}:/home/koto/Oled -v /home/${USER}/.ssh:/home/koto/.ssh -e UPATH=${PWD} --privileged koto_doc`
 
 **[NOTE]** ${PWD} forwards current folder path, can be replaced with other
 project path.

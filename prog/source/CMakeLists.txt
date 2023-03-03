@@ -46,3 +46,10 @@ if (CMAKE_ELFSIZE)
 else()
     message(WARNING "${Red}'get_size' not found:${ColorReset} cannot print memory footprint.")
 endif()
+
+# Run the script to modify paths for language daemon.
+add_custom_command(TARGET ${PROJECT_NAME}
+    DEPENDS copy-compile-commands
+    COMMAND ${POST_BUILD_CLEANUP}
+    COMMENT "Mod finished."
+)

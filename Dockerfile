@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y apt-utils software-properties-common 2>
 RUN add-apt-repository -y ppa:git-core/ppa && apt-get update && apt-get install -y \
     apt-utils \
     wget \
-    git=1:2.36.0-0ppa1~ubuntu18.04.1 \
+    git\
     vim \
     sudo \
     bc \
@@ -52,10 +52,11 @@ RUN adduser koto sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
-## Add ssh keychain login on container login. (id_rsa key name expected)
-#RUN echo "eval \`keychain --agents ssh --eval /home/koto/.ssh/id_rsa\`" > \
-#    /home/koto/.bashrc
-# NOTE: If enabled, pass the mount to the docker: -v /home/${USER}/.ssh:/home/koto/.ssh
+# Add ssh keychain login on container login. (id_rsa key name expected)
+RUN echo "eval \`keychain --agents ssh --eval /home/koto/.ssh/id_rsa\`" > \
+    /home/koto/.bashrc
+# NOTE: Pass the rsa keys folder path to the docker: -v /home/${USER}/.ssh:/home/koto/.ssh
+# skipped otherwise.
 
 # Install openocd v11 from sources with stm-link.
 RUN apt-get install -y \
@@ -90,8 +91,9 @@ RUN echo "#Config" >> /home/koto/.bashrc && \
     git config --global --add safe.directory "*"
 
 # Adding some commands to a history for the reverse search.
-RUN echo "rm -rf * && cmake .. && make -j" > /home/koto/.bash_history && \
-    echo "rm -rf * && cmake .. && make" > /home/koto/.bash_history
+RUN echo "rm -rf * && cmake .. && make" > /home/koto/.bash_history && \
+    echo "rm -rf * && cmake .. && make -j" >> /home/koto/.bash_history && \
+    echo "rm -rf * && cmake .. && make -j run" >> /home/koto/.bash_history
 
 ## Propagate the rules for the STM NUCLEO-F756ZG devboard programmer.
 RUN echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE:="0666", SYMLINK+="stlinkv2_%n", GROUP="plugdev"' \

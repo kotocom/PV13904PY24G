@@ -37,11 +37,12 @@ set(CMAKE_ELFSIZE
 )
 
 # Flags to delete  from compile_commands file in final post build cleanup.
-set(POST_BUILD_CLEANUP "sed" "-i"
+set(POST_BUILD_CLEANUP "sed" "-i" "-E"
     "-e" "s/-mcpu=cortex-m7//g"
     "-e" "s/-mlittle-endian//g"
     "-e" "s/-mthumb//g"
     "-e" "s/-DSTM32F756xG//g"
+    "-e" "s#/home/koto#$ENV{UPATH}#g"
 
     "${ROOT_CMAKE}/compile_commands.json"
 )
